@@ -1,0 +1,9 @@
+{
+  "name": "Fastify-Prisma-Tut",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/kelvinbush/Fastify-prisma-REST-API.git",
+  "author": "Kelvin",
+  "license": "MIT",
+  "private": true
+}
