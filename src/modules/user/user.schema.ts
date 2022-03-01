@@ -12,7 +12,6 @@ const userCore = {
 };
 const createUserSchema = z.object({
   ...userCore,
-  id: z.number(),
   password: z.string({
     required_error: "Password is required",
     invalid_type_error: "Password must be a string",
@@ -20,12 +19,29 @@ const createUserSchema = z.object({
 });
 
 const createUserResponseSchema = z.object({
+  id: z.number(),
   ...userCore,
 });
 
+const loginSchema = z.object({
+  email: z
+    .string({
+      required_error: "Email is required",
+      invalid_type_error: "Email must be a string",
+    })
+    .email(),
+  password: z.string(),
+});
+const loginResponseSchema = z.object({
+  accessToken: z.string(),
+});
+
+export type LoginInput = z.infer<typeof loginSchema>;
 export type CreateUserInput = z.infer<typeof createUserSchema>;
 
 export const { schemas: userSchemas, $ref } = buildJsonSchemas({
   createUserSchema,
   createUserResponseSchema,
+  loginSchema,
+  loginResponseSchema,
 });
