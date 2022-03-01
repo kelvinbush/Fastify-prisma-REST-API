@@ -1,9 +1,12 @@
 import Fastify, { FastifyReply, FastifyRequest } from "fastify";
+import fastifyJwt from "fastify-jwt";
+import fastifySwagger from "fastify-swagger";
+import { withRefResolver } from "fastify-zod";
 import userRoutes from "./modules/user/user.route";
 import { userSchemas } from "./modules/user/user.schema";
-import fastifyJwt from "fastify-jwt";
 import { productSchemas } from "./modules/products/product.schema";
 import productRoutes from "./modules/products/product.route";
+import { version } from "../package.json";
 
 export const server = Fastify();
 
@@ -47,6 +50,23 @@ async function main() {
   for (const schema of [...userSchemas, ...productSchemas]) {
     server.addSchema(schema);
   }
+
+  server.register(
+    fastifySwagger,
+    withRefResolver({
+      routePrefix: "/docs",
+      exposeRoute: true,
+      staticCSP: true,
+      openapi: {
+        info: {
+          title: "Fastify Api",
+          description: "Api for some products",
+          version,
+        },
+      },
+    })
+  );
+
   server.register(userRoutes, { prefix: "api/users" });
   server.register(productRoutes, { prefix: "api/products" });
 
